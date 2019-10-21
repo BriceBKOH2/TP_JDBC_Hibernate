@@ -1,10 +1,9 @@
-package tp_dbase.UtilDB;
+package tp_dbase_jdbc.UtilDB;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-//import local
-import tp_dbase.Table.*;
+import tp_dbase_jdbc.table.*;
 
 public class StatementDB {
 	Connection connect;

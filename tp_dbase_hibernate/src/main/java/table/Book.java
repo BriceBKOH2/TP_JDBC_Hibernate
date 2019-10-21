@@ -1,4 +1,4 @@
-package tp_dbase.Table;
+package table;
 
 public class Book {
 	Long id;

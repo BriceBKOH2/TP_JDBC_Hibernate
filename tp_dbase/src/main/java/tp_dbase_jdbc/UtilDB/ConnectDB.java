@@ -1,4 +1,4 @@
-package tp_dbase.UtilDB;
+package tp_dbase_jdbc.UtilDB;
 
 import java.sql.*;
 

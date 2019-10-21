@@ -1,12 +1,11 @@
-package tp_dbase;
+package tp_dbase_jdbc;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-// import local
-import tp_dbase.Table.*;
-import tp_dbase.UtilDB.*;
+import tp_dbase_jdbc.UtilDB.*;
+import tp_dbase_jdbc.table.*;
 
 public class Main {
 
