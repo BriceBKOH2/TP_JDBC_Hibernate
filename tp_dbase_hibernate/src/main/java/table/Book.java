@@ -29,7 +29,7 @@ public class Book {
 	@OneToMany (mappedBy = "preferedBook")
 	List<Client> preferedBy;
 	
-	@ManyToMany
+	@ManyToMany (mappedBy = "purchase")
 	List<Client> buyedBy;
 	
 	
@@ -98,8 +98,9 @@ public class Book {
 		this.preferedBy = clients;
 	}
 	
-	public void addPreferedBy(Client client) {
-		preferedBy.add(client);
+	public void addPreferedBy(Client...clients) {
+		for (Client c : clients)
+			preferedBy.add(c);
 	}
 	
 	public void addPreferedBy(List<Client> client) {
@@ -110,8 +111,9 @@ public class Book {
 		this.buyedBy = buyedBy;
 	}
 	
-	public void addBuyedBy(Client client) {
-		buyedBy.add(client);
+	public void addBuyedBy(Client...clients) {
+		for (Client c : clients)
+			buyedBy.add(c);
 	}
 	
 	public void addBuyedBy(List<Client> client) {

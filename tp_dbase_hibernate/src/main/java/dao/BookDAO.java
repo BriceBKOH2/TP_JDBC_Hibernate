@@ -1,6 +1,8 @@
 package dao;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 import table.*;
@@ -20,19 +22,46 @@ public class BookDAO {
 	}
 		
 	public static List<Client> getBuyedBy(Book book) {
-		return book.getBuyedBy();
+		EntityManager em = DatabaseHelper.createEntityManager();
+		DatabaseHelper.beginTx(em);
+		TypedQuery<Client> query = em.createQuery("SELECT DISTINCT c FROM Client c INNER JOIN c.purchase b "
+				+ "WHERE b.id =:id",Client.class);
+		query.setParameter("id", book.getId());
+		return query.getResultList();
 	}
 	
 	public static List<Client> getPreferedBy(Book book) {
-		return book.getPreferedBy();
-	}
-	
-	
-		// Setters : Add entry to table or modify column - data
-	public static void addBook(Book book) {
 		EntityManager em = DatabaseHelper.createEntityManager();
 		DatabaseHelper.beginTx(em);
-		em.persist(book);
+		TypedQuery<Client> query = em.createQuery("SELECT DISTINCT c FROM Client c INNER JOIN c.preferedBook b "
+				+ "WHERE b.id =:id",Client.class);
+		query.setParameter("id", book.getId());
+		return query.getResultList();
+	}
+	
+	public static List<Book> buyed() {
+		EntityManager em = DatabaseHelper.createEntityManager();
+		DatabaseHelper.beginTx(em);
+		TypedQuery<Book> query = em.createQuery("SELECT DISTINCT b FROM Client c INNER JOIN c.purchase b "
+				,Book.class);
+		return query.getResultList();
+	}
+	
+	public static List<Book> prefered() {
+		EntityManager em = DatabaseHelper.createEntityManager();
+		DatabaseHelper.beginTx(em);
+		TypedQuery<Book> query = em.createQuery("SELECT DISTINCT b FROM Client c INNER JOIN c.preferedBook b "
+				,Book.class);
+		return query.getResultList();
+	}
+	
+		// Setters : Add entry to table or modify column - data
+	
+	public static void addBook(Book...books) {
+		EntityManager em = DatabaseHelper.createEntityManager();
+		DatabaseHelper.beginTx(em);
+		for (Book b : books)
+			em.persist(b);
 		DatabaseHelper.commitTxAndClose(em);
 	}
 	
@@ -43,4 +72,5 @@ public class BookDAO {
 			em.persist(b);
 		DatabaseHelper.commitTxAndClose(em);
 	}
+	
 }

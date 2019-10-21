@@ -35,7 +35,7 @@ public class Client {
 	@ManyToOne 
 	Book preferedBook;
 	
-	@ManyToMany
+	@ManyToMany 
 	List<Book> purchase;
 	
 	// Constructors
@@ -118,8 +118,9 @@ public class Client {
 		this.purchase = purchase;
 	}
 
-	public void addPurchase(Book book) {
-		purchase.add(book);
+	public void addPurchase(Book...books) {
+		for (Book b : books)
+		purchase.add(b);
 	}
 	
 	public void addPurchase(List<Book> book) {
@@ -130,9 +131,9 @@ public class Client {
 	
 	public String toString() {
 		if (this.getPreferBook() != null) {
-			return "[id= " + this.getId() + " name=" + this.getFirstname() + " " + this.getLastname() + "]";
+			return "[id= " + this.getId() + " name=" + this.getFirstname() + " " + this.getLastname() + " prefered book= " + this.getPreferBook();
 		}
-		return "[id= " + this.getId() + " name=" + this.getFirstname() + " " + this.getLastname() + " prefered book= " + this.getPreferBook();
+		return "[id= " + this.getId() + " name=" + this.getFirstname() + " " + this.getLastname() + "]";
 	}
 	
 	public void printPurchase() {

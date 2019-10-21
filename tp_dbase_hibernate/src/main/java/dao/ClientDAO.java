@@ -28,9 +28,19 @@ public class ClientDAO {
 	public static List<Book> getPurchase(Client client) {
 		EntityManager em = DatabaseHelper.createEntityManager();
 		DatabaseHelper.beginTx(em);
-		TypedQuery<Book> query = em.createQuery("SELECT b FROM Book b INNER JOIN b.buyedBy c WHERE c.id =:id",Book.class);
+		TypedQuery<Book> query = em.createQuery("SELECT DISTINCT b FROM Book b INNER JOIN b.buyedBy c "
+				+ "WHERE c.id =:id",Book.class);
 		query.setParameter("id", client.getId());
 		return query.getResultList();
+	}
+	
+	public static Book getPreferedBook(Client client) {
+		EntityManager em = DatabaseHelper.createEntityManager();
+		DatabaseHelper.beginTx(em);
+		TypedQuery<Book> query = em.createQuery("SELECT DISTINCT b FROM Book b INNER JOIN b.preferedBy c "
+				+ "WHERE c.id =:id",Book.class);
+		query.setParameter("id", client.getId());
+		return query.getSingleResult();
 	}
 	
 		// Setters : Add entry to table or modify column - data
@@ -48,28 +58,40 @@ public class ClientDAO {
 			em.persist(c);
 		DatabaseHelper.commitTxAndClose(em);
 	}
+//	
+//	public static void purchase (Client client, Book book) {
+//		client.addPurchase(book);
+////		book.addBuyedBy(client);
+//		EntityManager em = DatabaseHelper.createEntityManager();
+//		DatabaseHelper.beginTx(em);
+//		em.merge(client);
+//		em.merge(book);
+//		DatabaseHelper.commitTxAndClose(em);
+//	}
 	
-	public static void purchase (Client client, Book book) {
-		client.addPurchase(book);
-		book.addBuyedBy(client);
+	public static void purchase (Client client, Book...books) {
+		
 		EntityManager em = DatabaseHelper.createEntityManager();
 		DatabaseHelper.beginTx(em);
+
+		for (Book b : books) {
+			client.addPurchase(b);
+			em.merge(b);
+		}
 		em.merge(client);
-		em.merge(book);
 		DatabaseHelper.commitTxAndClose(em);
 	}
 	
 	public static void purchase (Client client, List<Book> books) {
-		client.addPurchase(books);
 		
 		EntityManager em = DatabaseHelper.createEntityManager();
 		DatabaseHelper.beginTx(em);
-		em.merge(client);
 
 		for (Book b : books) {
-			b.addBuyedBy(client);
+			client.addPurchase(b);
 			em.merge(b);
 		}
+		em.merge(client);
 		DatabaseHelper.commitTxAndClose(em);
 	}
 	
